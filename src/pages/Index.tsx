@@ -5,15 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 import Icon from '@/components/ui/icon';
 import { toast } from '@/hooks/use-toast';
 
-const VALID_CODES = [
-  'DHEJJEBR', 'DHDHDVV', 'DUDUEJR', 'HXCUUCUC', 'SKSKGBGV',
-  'SUDHDV', 'UDHDVRV', 'DIDJSNSB', 'HFHFBF', 'DUFUFVVT',
-  'ALALAPL', 'FHFHT', 'VNDKSV', 'HDUEVCCCTJ', 'HEUEVECWL',
-  'JSIFVBEJSM', 'JDUFVTVE', 'HSBTBJDK'
-];
+const API_URL = {
+  auth: 'https://functions.poehali.dev/3ac2dcff-b031-409a-a135-9b923653f16f',
+  ai: 'https://functions.poehali.dev/8c6fc2c7-6263-44fa-bff3-a2d7fe94a4d3'
+};
 
 const AI_MODULES = [
   {
@@ -56,46 +55,200 @@ export default function Index() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authMode, setAuthMode] = useState<'code' | 'login' | 'register'>('code');
   const [code, setCode] = useState('');
+  const [validatedCode, setValidatedCode] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [userId, setUserId] = useState<number | null>(null);
   const [activeModule, setActiveModule] = useState<string | null>(null);
-  const [usedCodes] = useState<string[]>([]);
+  const [prompt, setPrompt] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleCodeSubmit = () => {
-    if (VALID_CODES.includes(code.toUpperCase()) && !usedCodes.includes(code.toUpperCase())) {
-      setAuthMode('register');
-      toast({
-        title: '✅ Код принят!',
-        description: 'Создайте свой аккаунт',
+  const handleCodeSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(API_URL.auth, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'check_code', code: code.toUpperCase() })
       });
-    } else {
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setValidatedCode(data.code);
+        setAuthMode('register');
+        toast({
+          title: '✅ Код принят!',
+          description: 'Создайте свой аккаунт',
+        });
+      } else {
+        toast({
+          title: '❌ Ошибка',
+          description: data.error || 'Неверный код',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
       toast({
         title: '❌ Ошибка',
-        description: 'Неверный код или код уже использован',
+        description: 'Не удалось проверить код',
         variant: 'destructive',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleRegister = () => {
-    if (username && password) {
-      setIsLoggedIn(true);
-      setIsAuthOpen(false);
+  const handleRegister = async () => {
+    if (!username || !password) {
       toast({
-        title: '🎉 Добро пожаловать!',
-        description: `Аккаунт ${username} успешно создан`,
+        title: '❌ Ошибка',
+        description: 'Заполните все поля',
+        variant: 'destructive',
       });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(API_URL.auth, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'register',
+          username,
+          password,
+          code: validatedCode
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setUserId(data.userId);
+        setIsLoggedIn(true);
+        setIsAuthOpen(false);
+        toast({
+          title: '🎉 Добро пожаловать!',
+          description: `Аккаунт ${username} успешно создан`,
+        });
+      } else {
+        toast({
+          title: '❌ Ошибка',
+          description: data.error || 'Не удалось создать аккаунт',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: '❌ Ошибка',
+        description: 'Ошибка регистрации',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleLogin = () => {
-    if (username && password) {
-      setIsLoggedIn(true);
-      setIsAuthOpen(false);
+  const handleLogin = async () => {
+    if (!username || !password) {
       toast({
-        title: '👋 С возвращением!',
-        description: 'Вы успешно вошли в систему',
+        title: '❌ Ошибка',
+        description: 'Заполните все поля',
+        variant: 'destructive',
       });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(API_URL.auth, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'login',
+          username,
+          password
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setUserId(data.userId);
+        setIsLoggedIn(true);
+        setIsAuthOpen(false);
+        toast({
+          title: '👋 С возвращением!',
+          description: `Добро пожаловать, ${data.username}!`,
+        });
+      } else {
+        toast({
+          title: '❌ Ошибка',
+          description: data.error || 'Неверный логин или пароль',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: '❌ Ошибка',
+        description: 'Ошибка входа',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAiGenerate = async (mediaType?: string) => {
+    if (!prompt.trim()) {
+      toast({
+        title: '❌ Ошибка',
+        description: 'Введите запрос',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    setAiResponse('');
+
+    try {
+      const response = await fetch(API_URL.ai, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          moduleType: activeModule,
+          prompt,
+          mediaType
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setAiResponse(data.response);
+        toast({
+          title: '✅ Готово!',
+          description: 'Запрос обработан',
+        });
+      } else {
+        toast({
+          title: '❌ Ошибка',
+          description: data.error || 'Ошибка генерации',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: '❌ Ошибка',
+        description: 'Не удалось выполнить запрос',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -106,11 +259,19 @@ export default function Index() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-4xl font-bold text-gradient mb-2">DUWDU1</h1>
-              <p className="text-white/60">Панель управления AI</p>
+              <p className="text-white/60">Панель управления AI · {username}</p>
             </div>
             <Button
               variant="outline"
-              onClick={() => setIsLoggedIn(false)}
+              onClick={() => {
+                setIsLoggedIn(false);
+                setUserId(null);
+                setUsername('');
+                setPassword('');
+                setActiveModule(null);
+                setPrompt('');
+                setAiResponse('');
+              }}
               className="glass-card border-white/20 text-white hover:bg-white/10"
             >
               <Icon name="LogOut" className="mr-2 h-4 w-4" />
@@ -125,7 +286,11 @@ export default function Index() {
                 className={`glass-card border-white/10 cursor-pointer transition-all hover:scale-105 ${
                   activeModule === module.id ? 'ring-2 ring-primary' : ''
                 }`}
-                onClick={() => setActiveModule(module.id)}
+                onClick={() => {
+                  setActiveModule(module.id);
+                  setPrompt('');
+                  setAiResponse('');
+                }}
               >
                 <CardHeader>
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${module.color} flex items-center justify-center mb-4 animate-float`}>
@@ -160,43 +325,91 @@ export default function Index() {
                   
                   {activeModule === 'website' && (
                     <div className="space-y-4">
-                      <Input
+                      <Textarea
                         placeholder="Опишите сайт, который хотите создать..."
-                        className="glass-card border-white/20 text-white placeholder:text-white/40"
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        className="glass-card border-white/20 text-white placeholder:text-white/40 min-h-[100px]"
                       />
-                      <Button className="w-full gradient-primary text-white font-semibold">
-                        <Icon name="Sparkles" className="mr-2 h-4 w-4" />
-                        Создать сайт
+                      <Button 
+                        onClick={() => handleAiGenerate()} 
+                        disabled={isLoading}
+                        className="w-full gradient-primary text-white font-semibold"
+                      >
+                        {isLoading ? (
+                          <>
+                            <Icon name="Loader2" className="mr-2 h-4 w-4 animate-spin" />
+                            Генерация...
+                          </>
+                        ) : (
+                          <>
+                            <Icon name="Sparkles" className="mr-2 h-4 w-4" />
+                            Создать сайт
+                          </>
+                        )}
                       </Button>
                     </div>
                   )}
 
                   {activeModule === 'text' && (
                     <div className="space-y-4">
-                      <Input
+                      <Textarea
                         placeholder="Задайте вопрос или опишите задачу..."
-                        className="glass-card border-white/20 text-white placeholder:text-white/40"
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        className="glass-card border-white/20 text-white placeholder:text-white/40 min-h-[100px]"
                       />
-                      <Button className="w-full gradient-primary text-white font-semibold">
-                        <Icon name="Send" className="mr-2 h-4 w-4" />
-                        Отправить
+                      <Button 
+                        onClick={() => handleAiGenerate()} 
+                        disabled={isLoading}
+                        className="w-full gradient-primary text-white font-semibold"
+                      >
+                        {isLoading ? (
+                          <>
+                            <Icon name="Loader2" className="mr-2 h-4 w-4 animate-spin" />
+                            Генерация...
+                          </>
+                        ) : (
+                          <>
+                            <Icon name="Send" className="mr-2 h-4 w-4" />
+                            Отправить
+                          </>
+                        )}
                       </Button>
                     </div>
                   )}
 
                   {activeModule === 'media' && (
                     <div className="space-y-4">
-                      <Input
+                      <Textarea
                         placeholder="Опишите изображение или видео..."
-                        className="glass-card border-white/20 text-white placeholder:text-white/40"
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        className="glass-card border-white/20 text-white placeholder:text-white/40 min-h-[100px]"
                       />
                       <div className="flex gap-2">
-                        <Button className="flex-1 gradient-primary text-white font-semibold">
-                          <Icon name="Image" className="mr-2 h-4 w-4" />
+                        <Button 
+                          onClick={() => handleAiGenerate('image')} 
+                          disabled={isLoading}
+                          className="flex-1 gradient-primary text-white font-semibold"
+                        >
+                          {isLoading ? (
+                            <Icon name="Loader2" className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            <Icon name="Image" className="mr-2 h-4 w-4" />
+                          )}
                           Фото
                         </Button>
-                        <Button className="flex-1 gradient-primary text-white font-semibold">
-                          <Icon name="Video" className="mr-2 h-4 w-4" />
+                        <Button 
+                          onClick={() => handleAiGenerate('video')} 
+                          disabled={isLoading}
+                          className="flex-1 gradient-primary text-white font-semibold"
+                        >
+                          {isLoading ? (
+                            <Icon name="Loader2" className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            <Icon name="Video" className="mr-2 h-4 w-4" />
+                          )}
                           Видео
                         </Button>
                       </div>
@@ -205,14 +418,45 @@ export default function Index() {
 
                   {activeModule === 'voice' && (
                     <div className="space-y-4">
-                      <div className="flex items-center justify-center py-12">
-                        <Button size="lg" className="gradient-primary text-white font-semibold rounded-full w-24 h-24">
-                          <Icon name="Mic" className="h-12 w-12" />
+                      <Textarea
+                        placeholder="Введите текст для озвучки или распознавания..."
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        className="glass-card border-white/20 text-white placeholder:text-white/40 min-h-[100px]"
+                      />
+                      <div className="flex items-center justify-center py-8">
+                        <Button 
+                          size="lg" 
+                          onClick={() => handleAiGenerate()} 
+                          disabled={isLoading}
+                          className="gradient-primary text-white font-semibold rounded-full w-24 h-24"
+                        >
+                          {isLoading ? (
+                            <Icon name="Loader2" className="h-12 w-12 animate-spin" />
+                          ) : (
+                            <Icon name="Mic" className="h-12 w-12" />
+                          )}
                         </Button>
                       </div>
                       <p className="text-center text-white/60 text-sm">
-                        Нажмите на микрофон и начните говорить
+                        Нажмите на микрофон для обработки
                       </p>
+                    </div>
+                  )}
+
+                  {aiResponse && (
+                    <div className="mt-6 p-4 bg-white/10 rounded-lg border border-white/20">
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center flex-shrink-0">
+                          <Icon name="Sparkles" className="h-4 w-4 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-white font-semibold mb-2">Результат</h4>
+                          <pre className="text-white/90 text-sm whitespace-pre-wrap font-sans leading-relaxed">
+                            {aiResponse}
+                          </pre>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -356,7 +600,14 @@ export default function Index() {
             </DialogDescription>
           </DialogHeader>
 
-          <Tabs value={authMode} onValueChange={(v) => setAuthMode(v as any)} className="w-full">
+          <Tabs value={authMode === 'register' ? 'code' : authMode} onValueChange={(v) => {
+            if (v !== 'code' || authMode !== 'register') {
+              setAuthMode(v as any);
+              setCode('');
+              setUsername('');
+              setPassword('');
+            }
+          }} className="w-full">
             <TabsList className="grid w-full grid-cols-2 glass-card border-white/10">
               <TabsTrigger value="code">По коду</TabsTrigger>
               <TabsTrigger value="login">Войти</TabsTrigger>
@@ -368,11 +619,15 @@ export default function Index() {
                   <Input
                     placeholder="Введите код доступа"
                     value={code}
-                    onChange={(e) => setCode(e.target.value)}
+                    onChange={(e) => setCode(e.target.value.toUpperCase())}
                     className="glass-card border-white/20 text-white placeholder:text-white/40"
                   />
-                  <Button onClick={handleCodeSubmit} className="w-full gradient-primary text-white font-semibold">
-                    Проверить код
+                  <Button 
+                    onClick={handleCodeSubmit} 
+                    disabled={isLoading}
+                    className="w-full gradient-primary text-white font-semibold"
+                  >
+                    {isLoading ? 'Проверка...' : 'Проверить код'}
                   </Button>
                   <div className="text-center">
                     <Button
@@ -387,6 +642,9 @@ export default function Index() {
               )}
               {authMode === 'register' && (
                 <>
+                  <div className="p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
+                    <p className="text-green-300 text-sm">✅ Код {validatedCode} подтверждён</p>
+                  </div>
                   <Input
                     placeholder="Придумайте никнейм"
                     value={username}
@@ -400,8 +658,12 @@ export default function Index() {
                     onChange={(e) => setPassword(e.target.value)}
                     className="glass-card border-white/20 text-white placeholder:text-white/40"
                   />
-                  <Button onClick={handleRegister} className="w-full gradient-primary text-white font-semibold">
-                    Создать аккаунт
+                  <Button 
+                    onClick={handleRegister} 
+                    disabled={isLoading}
+                    className="w-full gradient-primary text-white font-semibold"
+                  >
+                    {isLoading ? 'Создание...' : 'Создать аккаунт'}
                   </Button>
                 </>
               )}
@@ -421,8 +683,12 @@ export default function Index() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="glass-card border-white/20 text-white placeholder:text-white/40"
               />
-              <Button onClick={handleLogin} className="w-full gradient-primary text-white font-semibold">
-                Войти
+              <Button 
+                onClick={handleLogin} 
+                disabled={isLoading}
+                className="w-full gradient-primary text-white font-semibold"
+              >
+                {isLoading ? 'Вход...' : 'Войти'}
               </Button>
             </TabsContent>
           </Tabs>

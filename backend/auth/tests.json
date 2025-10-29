@@ -1,0 +1,26 @@
+{
+  "tests": [
+    {
+      "name": "Check valid unused code",
+      "method": "POST",
+      "body": {
+        "action": "check_code",
+        "code": "DHEJJEBR"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Check invalid code",
+      "method": "POST",
+      "body": {
+        "action": "check_code",
+        "code": "INVALID"
+      },
+      "expectedStatus": 400
+    }
+  ]
+}

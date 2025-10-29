@@ -1,0 +1,12 @@
+{
+  "tests": [
+    {
+      "name": "Missing fields validation",
+      "method": "POST",
+      "body": {
+        "moduleType": "website"
+      },
+      "expectedStatus": 400
+    }
+  ]
+}
