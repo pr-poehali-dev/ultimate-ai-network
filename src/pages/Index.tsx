@@ -452,9 +452,49 @@ export default function Index() {
                         </div>
                         <div className="flex-1">
                           <h4 className="text-white font-semibold mb-2">Результат</h4>
-                          <pre className="text-white/90 text-sm whitespace-pre-wrap font-sans leading-relaxed">
-                            {aiResponse}
-                          </pre>
+                          <div className="text-white/90 text-sm whitespace-pre-wrap font-sans leading-relaxed">
+                            {aiResponse.split('\n').map((line, idx) => {
+                              const urlMatch = line.match(/(https?:\/\/[^\s]+)/);
+                              if (urlMatch) {
+                                const url = urlMatch[1];
+                                const beforeUrl = line.substring(0, urlMatch.index);
+                                const afterUrl = line.substring((urlMatch.index || 0) + url.length);
+                                
+                                return (
+                                  <div key={idx} className="mb-2">
+                                    {beforeUrl}
+                                    <a 
+                                      href={url} 
+                                      target="_blank" 
+                                      rel="noopener noreferrer"
+                                      className="text-primary hover:text-secondary underline font-semibold break-all inline-flex items-center gap-1"
+                                    >
+                                      {url}
+                                      <Icon name="ExternalLink" className="h-3 w-3 inline" />
+                                    </a>
+                                    {afterUrl}
+                                  </div>
+                                );
+                              }
+                              
+                              if (line.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+                                return (
+                                  <div key={idx} className="my-4">
+                                    <img 
+                                      src={line.trim()} 
+                                      alt="Generated" 
+                                      className="max-w-full rounded-lg border border-white/20"
+                                      onError={(e) => {
+                                        e.currentTarget.style.display = 'none';
+                                      }}
+                                    />
+                                  </div>
+                                );
+                              }
+                              
+                              return <div key={idx}>{line || '\u00A0'}</div>;
+                            })}
+                          </div>
                         </div>
                       </div>
                     </div>
