@@ -16,36 +16,36 @@ const API_URL = {
 
 const AI_MODULES = [
   {
-    id: 'website',
-    title: 'Генерация сайтов',
-    icon: 'Globe',
-    description: 'Создание полноценных веб-сайтов за секунды',
-    performance: '25x быстрее конкурентов',
-    color: 'from-violet-500 to-purple-600'
-  },
-  {
     id: 'text',
-    title: 'Текстовая нейросеть',
-    icon: 'MessageSquare',
-    description: 'Генерация текста, ответы на вопросы, анализ',
-    performance: '25x точнее аналогов',
-    color: 'from-purple-500 to-pink-600'
+    title: 'DUWDU1 Нейросеть',
+    icon: 'Zap',
+    description: 'Революционная ИИ-система, превосходящая все существующие модели',
+    performance: '26x мощнее GPT-4',
+    color: 'from-orange-500 to-orange-600'
   },
   {
     id: 'media',
-    title: 'Видео и Фото',
+    title: 'DUWDU1 Imaging',
     icon: 'Image',
-    description: 'Генерация изображений и видео высочайшего качества',
-    performance: '25x качественнее рынка',
-    color: 'from-pink-500 to-rose-600'
+    description: 'Генерация изображений невиданного качества и точности',
+    performance: '26x детальнее DALL-E',
+    color: 'from-orange-600 to-amber-500'
+  },
+  {
+    id: 'website',
+    title: 'DUWDU1 WebGen',
+    icon: 'Globe',
+    description: 'Создание профессиональных сайтов за секунды',
+    performance: '26x быстрее конкурентов',
+    color: 'from-amber-500 to-orange-500'
   },
   {
     id: 'voice',
-    title: 'Голосовой ввод',
+    title: 'DUWDU1 Voice',
     icon: 'Mic',
-    description: 'Общение голосом с озвучкой ответов',
-    performance: '25x натуральнее других',
-    color: 'from-orange-500 to-amber-600'
+    description: 'Голосовой интерфейс с человеческой интонацией',
+    performance: '26x натуральнее других',
+    color: 'from-orange-400 to-orange-600'
   }
 ];
 
@@ -293,14 +293,14 @@ export default function Index() {
                 }}
               >
                 <CardHeader>
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${module.color} flex items-center justify-center mb-4 animate-float`}>
-                    <Icon name={module.icon as any} className="h-6 w-6 text-white" />
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${module.color} flex items-center justify-center mb-4 animate-float shadow-lg shadow-orange-500/50`}>
+                    <Icon name={module.icon as any} className="h-6 w-6 text-black" />
                   </div>
-                  <CardTitle className="text-white">{module.title}</CardTitle>
-                  <CardDescription className="text-white/60">{module.description}</CardDescription>
+                  <CardTitle className="text-white text-lg">{module.title}</CardTitle>
+                  <CardDescription className="text-white/70">{module.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Badge className="gradient-primary border-0">{module.performance}</Badge>
+                  <Badge className="bg-orange-500 text-black border-0 font-bold">{module.performance}</Badge>
                 </CardContent>
               </Card>
             ))}
@@ -317,24 +317,24 @@ export default function Index() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="bg-white/5 rounded-lg p-6 border border-white/10">
+                <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 rounded-lg p-6 border border-orange-500/20 shadow-2xl shadow-orange-500/10">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-3 h-3 rounded-full bg-green-500 animate-glow"></div>
-                    <span className="text-white font-medium">Нейросеть активна</span>
+                    <div className="w-3 h-3 rounded-full bg-orange-500 animate-glow shadow-lg shadow-orange-500/50"></div>
+                    <span className="text-white font-semibold">DUWDU1 онлайн</span>
                   </div>
                   
                   {activeModule === 'website' && (
                     <div className="space-y-4">
                       <Textarea
-                        placeholder="Опишите сайт, который хотите создать..."
+                        placeholder="Опишите сайт для DUWDU1..."
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        className="glass-card border-white/20 text-white placeholder:text-white/40 min-h-[100px]"
+                        className="bg-black/50 border-orange-500/30 text-white placeholder:text-white/50 min-h-[100px] focus:border-orange-500 focus:ring-orange-500/50"
                       />
                       <Button 
                         onClick={() => handleAiGenerate()} 
                         disabled={isLoading}
-                        className="w-full gradient-primary text-white font-semibold"
+                        className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-black font-bold shadow-lg shadow-orange-500/50 hover:shadow-orange-500/70 transition-all"
                       >
                         {isLoading ? (
                           <>
@@ -354,15 +354,15 @@ export default function Index() {
                   {activeModule === 'text' && (
                     <div className="space-y-4">
                       <Textarea
-                        placeholder="Задайте вопрос или опишите задачу..."
+                        placeholder="Задайте вопрос DUWDU1..."
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        className="glass-card border-white/20 text-white placeholder:text-white/40 min-h-[100px]"
+                        className="bg-black/50 border-orange-500/30 text-white placeholder:text-white/50 min-h-[100px] focus:border-orange-500 focus:ring-orange-500/50"
                       />
                       <Button 
                         onClick={() => handleAiGenerate()} 
                         disabled={isLoading}
-                        className="w-full gradient-primary text-white font-semibold"
+                        className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-black font-bold shadow-lg shadow-orange-500/50 hover:shadow-orange-500/70 transition-all"
                       >
                         {isLoading ? (
                           <>
@@ -382,16 +382,16 @@ export default function Index() {
                   {activeModule === 'media' && (
                     <div className="space-y-4">
                       <Textarea
-                        placeholder="Опишите изображение или видео..."
+                        placeholder="Опишите изображение для DUWDU1 Imaging..."
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        className="glass-card border-white/20 text-white placeholder:text-white/40 min-h-[100px]"
+                        className="bg-black/50 border-orange-500/30 text-white placeholder:text-white/50 min-h-[100px] focus:border-orange-500 focus:ring-orange-500/50"
                       />
                       <div className="flex gap-2">
                         <Button 
                           onClick={() => handleAiGenerate('image')} 
                           disabled={isLoading}
-                          className="flex-1 gradient-primary text-white font-semibold"
+                          className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-black font-bold shadow-lg shadow-orange-500/50 hover:shadow-orange-500/70 transition-all"
                         >
                           {isLoading ? (
                             <Icon name="Loader2" className="mr-2 h-4 w-4 animate-spin" />
@@ -403,7 +403,7 @@ export default function Index() {
                         <Button 
                           onClick={() => handleAiGenerate('video')} 
                           disabled={isLoading}
-                          className="flex-1 gradient-primary text-white font-semibold"
+                          className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-black font-bold shadow-lg shadow-orange-500/50 hover:shadow-orange-500/70 transition-all"
                         >
                           {isLoading ? (
                             <Icon name="Loader2" className="mr-2 h-4 w-4 animate-spin" />
@@ -419,17 +419,17 @@ export default function Index() {
                   {activeModule === 'voice' && (
                     <div className="space-y-4">
                       <Textarea
-                        placeholder="Введите текст для озвучки или распознавания..."
+                        placeholder="Текст для DUWDU1 Voice..."
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        className="glass-card border-white/20 text-white placeholder:text-white/40 min-h-[100px]"
+                        className="bg-black/50 border-orange-500/30 text-white placeholder:text-white/50 min-h-[100px] focus:border-orange-500 focus:ring-orange-500/50"
                       />
                       <div className="flex items-center justify-center py-8">
                         <Button 
                           size="lg" 
                           onClick={() => handleAiGenerate()} 
                           disabled={isLoading}
-                          className="gradient-primary text-white font-semibold rounded-full w-24 h-24"
+                          className="bg-gradient-to-r from-orange-500 to-orange-600 text-black font-bold rounded-full w-24 h-24 shadow-2xl shadow-orange-500/50 hover:shadow-orange-500/70 transition-all"
                         >
                           {isLoading ? (
                             <Icon name="Loader2" className="h-12 w-12 animate-spin" />
@@ -445,10 +445,10 @@ export default function Index() {
                   )}
 
                   {aiResponse && (
-                    <div className="mt-6 p-4 bg-white/10 rounded-lg border border-white/20">
+                    <div className="mt-6 p-4 bg-gradient-to-br from-orange-500/10 to-transparent rounded-lg border border-orange-500/30 shadow-xl shadow-orange-500/10">
                       <div className="flex items-start gap-3 mb-3">
-                        <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center flex-shrink-0">
-                          <Icon name="Sparkles" className="h-4 w-4 text-white" />
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-orange-500/50">
+                          <Icon name="Sparkles" className="h-4 w-4 text-black" />
                         </div>
                         <div className="flex-1">
                           <h4 className="text-white font-semibold mb-2">Результат</h4>
@@ -467,7 +467,7 @@ export default function Index() {
                                       href={url} 
                                       target="_blank" 
                                       rel="noopener noreferrer"
-                                      className="text-primary hover:text-secondary underline font-semibold break-all inline-flex items-center gap-1"
+                                      className="text-orange-500 hover:text-orange-400 underline font-semibold break-all inline-flex items-center gap-1 transition-colors"
                                     >
                                       {url}
                                       <Icon name="ExternalLink" className="h-3 w-3 inline" />
@@ -503,16 +503,16 @@ export default function Index() {
 
                 <div className="grid grid-cols-3 gap-4 pt-4">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gradient">20038x</div>
-                    <div className="text-sm text-white/60">Превосходство</div>
+                    <div className="text-3xl font-black text-gradient">26x</div>
+                    <div className="text-sm text-white/70 font-medium">Мощнее GPT-4</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gradient">100%</div>
-                    <div className="text-sm text-white/60">Точность</div>
+                    <div className="text-3xl font-black text-gradient">100%</div>
+                    <div className="text-sm text-white/70 font-medium">Точность</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gradient">∞</div>
-                    <div className="text-sm text-white/60">Возможности</div>
+                    <div className="text-3xl font-black text-gradient">∞</div>
+                    <div className="text-sm text-white/70 font-medium">Возможности</div>
                   </div>
                 </div>
               </CardContent>
@@ -524,26 +524,28 @@ export default function Index() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1A1F2C] via-[#2D1B4E] to-[#1A1F2C] relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM4QjVDRjYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzBoLTZ2LTZoNnYtem0tNiAwdi02aC02djZoNnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-30"></div>
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZjZiMDAiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDMwaC02di02aDZ2LTZ6bS02IDB2LTZoLTZ2Nmg2eiIvPjwvZz48L2c+PC9zdmc+')] opacity-30"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-orange-600/10"></div>
       
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="text-center mb-16 animate-fade-in">
           <div className="inline-block mb-6">
-            <Badge className="gradient-accent text-white border-0 px-6 py-2 text-lg font-semibold animate-glow">
-              Новая эра искусственного интеллекта
+            <Badge className="bg-gradient-to-r from-orange-500 to-orange-600 text-black border-0 px-6 py-2 text-lg font-semibold animate-glow">
+              🔥 Революция в мире нейросетей
             </Badge>
           </div>
-          <h1 className="text-6xl md:text-8xl font-black text-gradient mb-6 animate-scale-in">
+          <h1 className="text-7xl md:text-9xl font-black text-gradient mb-6 animate-scale-in tracking-tight">
             DUWDU1
           </h1>
-          <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto">
-            Нейросеть следующего поколения. В 20038 раз мощнее всех существующих решений.
+          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Нейросеть нового поколения, которая <span className="text-orange-500 font-bold">в 26 раз превосходит</span> GPT-4.
+            <span className="block mt-4 text-2xl md:text-3xl font-bold text-gradient">Перевернём индустрию вместе.</span>
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="gradient-primary text-white font-bold text-lg px-8 py-6 hover:scale-105 transition-transform"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 text-black font-bold text-lg px-8 py-6 hover:scale-105 transition-transform shadow-lg shadow-orange-500/50"
               onClick={() => setIsAuthOpen(true)}
             >
               <Icon name="Rocket" className="mr-2 h-5 w-5" />
