@@ -1,0 +1,36 @@
+{
+  "tests": [
+    {
+      "name": "Test text module",
+      "method": "POST",
+      "body": {
+        "module": "text",
+        "prompt": "Привет"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "response": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test webgen module",
+      "method": "POST",
+      "body": {
+        "module": "webgen",
+        "prompt": "Создай сайт магазина"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "html": "string",
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test OPTIONS for CORS",
+      "method": "OPTIONS",
+      "expectedStatus": 200
+    }
+  ]
+}
