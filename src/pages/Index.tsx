@@ -13,29 +13,29 @@ const AI_MODULES = [
     id: 'text',
     title: 'DUWDU Нейросеть',
     icon: 'Brain',
-    description: 'Поиск в интернете, обучение на запросах',
-    color: 'from-blue-500 to-blue-600'
+    description: 'Краткие понятные ответы',
+    color: 'from-purple-500 to-purple-600'
   },
   {
     id: 'webgen',
     title: 'WebGen',
     icon: 'Globe',
-    description: 'Создание реальных сайтов по запросу',
-    color: 'from-purple-500 to-purple-600'
+    description: 'Любые сайты как Юра',
+    color: 'from-violet-500 to-violet-600'
   },
   {
     id: 'imaging',
     title: 'Imaging',
     icon: 'Image',
-    description: 'Генерация через Шедеврум',
-    color: 'from-pink-500 to-pink-600'
+    description: 'Фото или видео',
+    color: 'from-fuchsia-500 to-fuchsia-600'
   },
   {
     id: 'voice',
     title: 'Voice',
     icon: 'Mic',
-    description: 'Озвучка текста с поиском голосов',
-    color: 'from-green-500 to-green-600'
+    description: 'Озвучка текста',
+    color: 'from-indigo-500 to-indigo-600'
   }
 ];
 
@@ -114,19 +114,20 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM4YjVjZjYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDMwaC02di02aDZ2LTZ6bS02IDB2LTZoLTZ2Nmg2eiIvPjwvZz48L2c+PC9zdmc+')] opacity-30"></div>
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-violet-900/20"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM4YjVjZjYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDMwaC02di02aDZ2LTZ6bS02IDB2LTZoLTZ2Nmg2eiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
       
       <div className="container mx-auto px-4 py-8 relative z-10 max-w-6xl">
         <div className="text-center mb-8">
-          <Badge className="bg-gradient-to-r from-purple-500 to-blue-500 text-white border-0 px-4 py-1.5 text-sm font-bold mb-3">
+          <Badge className="bg-purple-600 text-white border-0 px-4 py-1.5 text-sm font-bold mb-3">
             ⚡ Нейросеть сквозь время
           </Badge>
-          <h1 className="text-5xl md:text-6xl font-black text-white mb-3 tracking-tight">
+          <h1 className="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent mb-3 tracking-tight">
             DUWDU
           </h1>
-          <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto">
-            Обучение на вопросах • Поиск в интернете • Генерация сайтов
+          <p className="text-base md:text-lg text-purple-200/80 max-w-2xl mx-auto">
+            Краткие ответы • Генерация сайтов • Фото и видео • Озвучка
           </p>
         </div>
 
@@ -134,8 +135,8 @@ export default function Index() {
           {AI_MODULES.map((module) => (
             <Card
               key={module.id}
-              className={`glass-card border-purple-500/30 cursor-pointer transition-all duration-300 hover:scale-105 hover:border-purple-400 ${
-                activeModule === module.id ? 'border-purple-400 shadow-lg shadow-purple-500/30' : ''
+              className={`glass-card border-purple-500/20 cursor-pointer transition-all duration-300 hover:scale-105 hover:border-purple-500 ${
+                activeModule === module.id ? 'border-purple-500 shadow-lg shadow-purple-500/40 bg-purple-500/10' : 'bg-black/40'
               }`}
               onClick={() => {
                 setActiveModule(module.id);
@@ -155,7 +156,7 @@ export default function Index() {
         </div>
 
         {activeModule && (
-          <Card className="glass-card border-purple-500/30 shadow-2xl shadow-purple-500/10">
+          <Card className="glass-card border-purple-500/30 shadow-2xl shadow-purple-500/20 bg-black/60">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-lg flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
@@ -168,15 +169,15 @@ export default function Index() {
                 {activeModule === 'text' && (
                   <div className="space-y-2">
                     <Textarea
-                      placeholder="Например: Как приготовить гречневую молочную кашу?"
+                      placeholder="Например: Привет"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
-                      className="bg-black/50 border-purple-500/30 text-white placeholder:text-white/50 min-h-[80px] focus:border-purple-400 text-sm"
+                      className="bg-black/70 border-purple-500/30 text-white placeholder:text-purple-300/50 min-h-[80px] focus:border-purple-500 text-sm"
                     />
                     <Button 
                       onClick={handleAiGenerate} 
                       disabled={isLoading}
-                      className="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold shadow-lg hover:shadow-purple-500/50"
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-lg shadow-purple-500/30"
                     >
                       {isLoading ? (
                         <>
@@ -196,15 +197,15 @@ export default function Index() {
                 {activeModule === 'webgen' && (
                   <div className="space-y-2">
                     <Textarea
-                      placeholder="Например: Создай сайт про котиков"
+                      placeholder="Например: Создай сайт про космос"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
-                      className="bg-black/50 border-purple-500/30 text-white placeholder:text-white/50 min-h-[80px] focus:border-purple-400 text-sm"
+                      className="bg-black/70 border-purple-500/30 text-white placeholder:text-purple-300/50 min-h-[80px] focus:border-purple-500 text-sm"
                     />
                     <Button 
                       onClick={handleAiGenerate} 
                       disabled={isLoading}
-                      className="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold shadow-lg"
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-lg shadow-purple-500/30"
                     >
                       {isLoading ? (
                         <>
@@ -224,16 +225,16 @@ export default function Index() {
                 {activeModule === 'imaging' && (
                   <div className="space-y-2">
                     <Textarea
-                      placeholder="Например: Нарисуй котика"
+                      placeholder="Например: Космический корабль"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
-                      className="bg-black/50 border-purple-500/30 text-white placeholder:text-white/50 min-h-[80px] focus:border-purple-400 text-sm"
+                      className="bg-black/70 border-purple-500/30 text-white placeholder:text-purple-300/50 min-h-[80px] focus:border-purple-500 text-sm"
                     />
                     <div className="flex gap-2">
                       <Button 
                         onClick={() => { setMediaType('image'); handleAiGenerate(); }} 
                         disabled={isLoading}
-                        className="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold shadow-lg"
+                        className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-lg shadow-purple-500/30"
                       >
                         {isLoading && mediaType === 'image' ? (
                           <Icon name="Loader2" className="mr-2 h-4 w-4 animate-spin" />
@@ -245,7 +246,7 @@ export default function Index() {
                       <Button 
                         onClick={() => { setMediaType('video'); handleAiGenerate(); }} 
                         disabled={isLoading}
-                        className="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold shadow-lg"
+                        className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-lg shadow-purple-500/30"
                       >
                         {isLoading && mediaType === 'video' ? (
                           <Icon name="Loader2" className="mr-2 h-4 w-4 animate-spin" />
@@ -261,10 +262,10 @@ export default function Index() {
                 {activeModule === 'voice' && (
                   <div className="space-y-2">
                     <Textarea
-                      placeholder="Текст для озвучки..."
+                      placeholder="Например: я крутой"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
-                      className="bg-black/50 border-purple-500/30 text-white placeholder:text-white/50 min-h-[80px] focus:border-purple-400 text-sm"
+                      className="bg-black/70 border-purple-500/30 text-white placeholder:text-purple-300/50 min-h-[80px] focus:border-purple-500 text-sm"
                     />
                     <div className="grid grid-cols-3 gap-2">
                       {[
@@ -276,7 +277,7 @@ export default function Index() {
                           key={voice.id}
                           variant={selectedVoice === voice.id ? 'default' : 'outline'}
                           onClick={() => setSelectedVoice(voice.id)}
-                          className={selectedVoice === voice.id ? 'bg-green-500 text-white text-xs' : 'border-green-500/30 text-white hover:bg-green-500/20 text-xs'}
+                          className={selectedVoice === voice.id ? 'bg-purple-600 text-white text-xs' : 'border-purple-500/30 text-white hover:bg-purple-500/20 text-xs'}
                         >
                           {voice.name}
                         </Button>
@@ -285,7 +286,7 @@ export default function Index() {
                     <Button 
                       onClick={handleAiGenerate} 
                       disabled={isLoading}
-                      className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold shadow-lg"
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-lg shadow-purple-500/30"
                     >
                       {isLoading ? (
                         <>
@@ -305,7 +306,7 @@ export default function Index() {
                 {aiResponse && (
                   <div className="mt-3 p-3 bg-gradient-to-br from-purple-500/10 to-transparent rounded-lg border border-purple-500/30">
                     <div className="flex items-start gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center flex-shrink-0 shadow-lg">
+                      <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/50">
                         <Icon name="Sparkles" className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -403,8 +404,8 @@ export default function Index() {
           </Card>
         )}
 
-        <div className="text-center mt-6 text-white/40 text-xs">
-          <p>⚡ DUWDU — Нейросеть сквозь время | Обучение • Поиск • Генерация</p>
+        <div className="text-center mt-6 text-purple-400/60 text-xs">
+          <p>⚡ DUWDU — Нейросеть сквозь время</p>
         </div>
       </div>
     </div>
